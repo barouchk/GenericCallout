@@ -1,0 +1,89 @@
+<template>
+    <lightning-spinner if:true={isLoading}></lightning-spinner>
+    <c-flow-resource-explorer
+            name={lastSelectedInput}
+            label={resourceExplorerLabel}
+            builder-context={builderContext}
+            onvaluechanged={handleResourceSelected}
+            disabled={disableResourceExplorer}
+    ></c-flow-resource-explorer>
+    <lightning-accordion
+            onsectiontoggle={handleToggleSection}
+            active-section-name={openSections}
+            allow-multiple-sections-open
+    >
+        <lightning-accordion-section name="request" label="Request">
+                <lightning-combobox
+                    class="slds-m-bottom-small"
+                    required
+                    name="serviceEndpoint"
+                    label="Service Endpoint"
+                    placeholder="Choose Service Endpoint"
+                    value={serviceEndpointId}
+                    onchange={handleServiceEndpointChange}
+                    onclick={handleDisableResourceExplorer}
+                    options={serviceEndpointOptions}>
+                </lightning-combobox>
+            <lightning-textarea
+                    name="paramsJson"
+                    data-name="paramsJson"
+                    label="Request Parameters"
+                    value={inputVariablesMap.paramsJson.value}
+                    onchange={handleParamChange}
+                    onfocus={setLastSelectedInput}
+                    onkeydown={handleJsonParamsKeyDown}
+                    class="slds-m-bottom_x-small"
+                    style={textAreaStyle}
+                    required
+            ></lightning-textarea>
+            <lightning-button label="Validate" onclick={validateParamsJson}></lightning-button>
+            <lightning-button label="Prettify" onclick={prettifyParamsJson} class="slds-m-left_x-small"></lightning-button>
+        </lightning-accordion-section>
+        <template if:true={outputSections} for:each={outputSections} for:item="section">
+            <lightning-accordion-section key={section.name} name={section.name} label={section.label}>
+                <template if:true={section.topFields}>
+                    <template for:each={section.topFields} for:item="topField">
+                        <lightning-input
+                                name={topField.name}
+                                data-name={topField.name}
+                                key={topField.name}
+                                label={topField.label}
+                                value={topField.value}
+                                data-section={section.name}
+                                onchange={handleParamChange}
+                                onfocus={setLastSelectedInput}
+                                data-top="true"
+                                class="slds-m-bottom_small"
+                        ></lightning-input>
+                    </template>
+                </template>
+                <div for:each={section.fields} for:item="field" key={field.name} class="slds-m-bottom_small">
+                    <lightning-input
+                            name={field.name}
+                            data-name={field.name}
+                            label={field.name}
+                            value={field.value}
+                            data-section={section.name}
+                            onchange={handleParamChange}
+                            onfocus={setLastSelectedInput}
+                    ></lightning-input>
+                </div>
+                <lightning-button-icon
+                        name={section.name}
+                        icon-name="utility:add"
+                        title="Add Output"
+                        onclick={handleAddOutput}
+                        disabled={section.disableAdd}
+                        class="slds-m-right_xx-small"
+                ></lightning-button-icon>
+                <lightning-button-icon
+                        name={section.name}
+                        icon-name="utility:close"
+                        title="Remove Output"
+                        onclick={handleRemoveOutput}
+                        disabled={section.disableRemove}
+                ></lightning-button-icon>
+            </lightning-accordion-section>
+        </template>
+    </lightning-accordion>
+</template>

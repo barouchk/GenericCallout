@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Content_Type__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Content Type</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>application/json;charset=UTF-8</fullName>
+                <default>true</default>
+                <label>application/json;UTF-8</label>
+            </value>
+            <value>
+                <fullName>application/xml</fullName>
+                <default>false</default>
+                <label>application/xml</label>
+            </value>
+            <value>
+                <fullName>application/x-www-form-urlencoded</fullName>
+                <default>false</default>
+                <label>application/x-www-form-urlencoded</label>
+            </value>
+            <value>
+                <fullName>text/plain</fullName>
+                <default>false</default>
+                <label>text/plain</label>
+            </value>
+            <value>
+                <fullName>application/json</fullName>
+                <default>false</default>
+                <label>application/json</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

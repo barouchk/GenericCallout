@@ -124,7 +124,7 @@ export default class GenericInvocableRequestConfigurationEditor extends Lightnin
             if (dataset.top) {
                 section.topFieldsMap[name].value = newValue;
             } else if (name === section.fields.at(-1).name) { // is last element in array
-                section.disableAdd = isEmpty(newValue);
+                section.disableAdd = this.isEmpty(newValue) || this.isOutputSectionFull(section);
                 this.outputSections = [...outputSections]; // doesn't render without this 🤷
             }
         }
@@ -312,7 +312,7 @@ export default class GenericInvocableRequestConfigurationEditor extends Lightnin
 
         for (const section of outputSections) {
             const lastOutputField = section.fields.at(-1);
-            section.disableAdd = lastOutputField && (isEmpty(lastOutputField.value) || this.isOutputSectionFull(section));
+            section.disableAdd = lastOutputField && (this.isEmpty(lastOutputField.value) || this.isOutputSectionFull(section));
             section.disableRemove = section.fields.length === 0;
         }
     }

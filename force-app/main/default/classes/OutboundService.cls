@@ -76,9 +76,6 @@ global with sharing class OutboundService {
 
     private static String getEndpoint(Service_Endpoint__mdt serviceEndpoint) {
         String endpoint = 'callout:' + envSettings.Env__c + ORG_NAME_SERVICE_DELIMITER + serviceEndpoint.Service_Name__c + serviceEndpoint.Service_Endpoint__c;
-        if(serviceEndpoint.Include_Token__c) {
-            endpoint += envSettings.EndPoint_Token__c;
-        }
 
         return endpoint;
     }

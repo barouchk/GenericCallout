@@ -33,8 +33,7 @@ public without sharing class Outbound_Utils {
                                     'FromSystem'     => 'Salesforce',
                                     'ToSystem'       => 'K2VIEW',
                                     'TransactionId'  => generateUUID(),
-                                    'UserIdentifier' => currentUser.FederationIdentifier,
-                                    'token'          => getTokenFromEnvSetting()
+                                    'UserIdentifier' => currentUser.FederationIdentifier
                                     }
             };
     }
@@ -42,10 +41,6 @@ public without sharing class Outbound_Utils {
     public static String getEnvCode(){
         EnvSettings__c envSettings = EnvSettings__c.getInstance('Main');
         return  SALESFORCE + '_' + envSettings.Env__c;
-    }
-    public String getTokenFromEnvSetting(){
-        return envSettings.EndPoint_Token__c.substringAfter('=');
-
     }
 
 }

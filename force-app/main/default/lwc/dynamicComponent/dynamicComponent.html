@@ -1,0 +1,154 @@
+<template>
+
+  <article class={cardClass}>
+    <div class={headerClass} if:false={hideHeader}>
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <div class="slds-media__figure">
+          <span class="slds-icon_container" title={title}>
+            <lightning-icon icon-name={icon} size="small"></lightning-icon>
+            <span class="slds-assistive-text">{icon}</span>
+          </span>
+        </div>
+        <div class="slds-media__body">
+          <h2 class="slds-card__header-title">
+            <span class="slds-card__header-link slds-truncate" title={title}>
+              <span>{title}</span>
+            </span>
+          </h2>
+        </div>
+        <div class="slds-no-flex" if:true={actions}>
+          <lightning-button-group>
+            <lightning-button for:each={actions} for:item="action" label={action.label} name={action.name}
+              key={action.name} disabled={disableActions} onclick={handleListActionClicked}>
+            </lightning-button>
+          </lightning-button-group>
+        </div>
+      </header>
+    </div>
+    <div class="slds-card__body slds-card__body_inner">
+      <template if:true={isWrapperLoaded}>
+
+        <c-util-make-callout record-id={recordId} wired-fields={wiredFields} apex-class={apexClass}
+          service-endpoint={serviceEndpoint} callout-params={calloutParams} oncalloutresult={handleCalloutResult}>
+          <!-- <c-lwc-labs-loading-stencil lwc:if={isLoading} type="list"></c-lwc-labs-loading-stencil> -->
+
+          <template if:false={isDataLoaded}>
+            <div class="slds-spinner_inline">
+
+              <lightning-spinner></lightning-spinner>
+            </div>
+          </template>
+
+          <template if:true={isDataLoaded}>
+            <template if:true={data}>
+              <template if:true={isTable}>
+
+                <div class="slds-scrollable_x">
+                  <c-custom-data-table key-field="id" data={data} columns={columns}
+                    hide-checkbox-column={hideCheckboxColumn} resize-column-disabled max-row-selection={maxRowSelection}
+                    max-column-width="2000" onrowselection={handleRowSelection} onrowaction={handleRowAction}>
+                  </c-custom-data-table>
+                </div>
+
+              </template>
+              <template if:true={isDetailPage}>
+
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                  <template for:each={data.mainData} for:item="field">
+                    <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
+                      <div class="slds-form-element slds-form-element_readonly">
+                        <span class="slds-form-element__label">{field.label}</span>
+                        <div class="slds-form-element__control">
+                          <div class="slds-form-element__static slds-truncate">{field.value}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+
+                <lightning-accordion active-section-name={data.activeSections} allow-multiple-sections-open
+                  class="slds-m-bottom_medium">
+                  <template if:true={data.sections} for:each={data.sections} for:item="section">
+                    <lightning-accordion-section key={section.id} name={section.title} label={section.title}
+                      class="accordion-section-hooks slds-m-bottom_small">
+                      <div class="slds-grid slds-wrap slds-gutters">
+                        <template for:each={section.fields} for:item="field">
+                          <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
+                            <div class="slds-form-element slds-form-element_readonly">
+                              <span class="slds-form-element__label">{field.label}</span>
+                              <div class="slds-form-element__control">
+                                <div class="slds-form-element__static slds-truncate">{field.value}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </lightning-accordion-section>
+                  </template>
+                </lightning-accordion>
+
+                <!-- <div class="slds-grid slds-wrap slds-gutters">
+                  <template for:each={data} for:item="field">
+                    <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
+                      <div class="slds-form-element slds-form-element_readonly">
+                        <span class="slds-form-element__label">{field.label}</span>
+                        <div class="slds-form-element__control">
+                          <div class="slds-form-element__static slds-truncate">{field.value}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div> -->
+
+              </template>
+              <template if:true={isCompactLayout}>
+
+                <div class="slds-grid slds-gutters">
+                  <div class="slds-col" for:each={data} for:item="field" key={field.fieldName}>
+                    <div class="slds-m-horizontal_medium">
+                      <p class="slds-text-title">{field.label}</p>
+                      <p><strong>{field.value}</strong></p>
+                    </div>
+                  </div>
+                </div>
+
+              </template>
+            </template>
+          </template>
+        </c-util-make-callout>
+
+        <div if:true={displayDynamicIllustration}>
+          <c-dynamic-illustration label={noDataMessage} illustration-name={illustration} size={illustrationSize}>
+          </c-dynamic-illustration>
+        </div>
+      </template>
+
+    </div>
+  </article>
+
+  <template if:true={flowApiName}>
+    <div>
+      <section role="dialog" tabindex="-1" class={modalClass}>
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <h1 class="slds-text-heading--medium"> {title}</h1>
+            <lightning-button-icon icon-name="utility:close" size="large" class="slds-modal__close"
+              variant="bare-inverse" onclick={closeModal}>
+            </lightning-button-icon>
+          </header>
+          <div class="slds-modal__content">
+            <slot name="body">
+              <lightning-flow flow-api-name={flowApiName} flow-input-variables={inputVariables}
+                onstatuschange={handleFlowStatusChange}>
+              </lightning-flow>
+            </slot>
+          </div>
+          <!-- <footer class="slds-modal__footer">
+                      <slot name="footer"></slot>
+                  </footer> -->
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+  </template>
+</template>

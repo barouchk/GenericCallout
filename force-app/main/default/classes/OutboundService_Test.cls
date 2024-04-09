@@ -1,10 +1,4 @@
-/**
- * Created by ilana.brodsky on 10/08/2020.
-    * @modifiedBy     
-    * @version        
-    * @created        10/08/2020
-    * @modified      
- */
+
 @IsTest
 private with sharing class OutboundService_Test {
 

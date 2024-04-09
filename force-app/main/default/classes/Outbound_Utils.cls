@@ -1,11 +1,3 @@
-/**
- * Created by ilana.brodsky on 30/08/2020.
-    * @modifiedBy     
-    * @version        
-    * @created        30/08/2020
-    * @modified      
- */
-
 public without sharing class Outbound_Utils {
     private static  EnvSettings__c envSettings = EnvSettings__c.getInstance('Main');
     final static String SALESFORCE = 'SalesForce';

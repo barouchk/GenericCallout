@@ -1,8 +1,8 @@
 <template>
-    <div class="slds-illustration slds-illustration_large" aria-hidden="true">
-        <img src={dynamicSrc} class="slds-illustration__svg" alt=""/>
+    <div class={illustrationClass} aria-hidden="true">
+        <img if:true={dynamicSrc} src={dynamicSrc} class="slds-illustration__svg" alt={label}/>
         <div class="slds-text-color_weak">
-            <h3 class="slds-text-heading_medium">{dynamicLabel}</h3>
+            <h3 class="slds-text-heading_medium">{label}</h3>
         </div>
     </div>
 </template>

@@ -1,4 +1,4 @@
-public with sharing class GenericInvocableRequest {
+public with sharing class GenericInvocableRequest implements DCService  {
     public virtual class Request {
         @InvocableVariable(label='Service Endpoint Developer Name' description='Service_Endpoint__mdt DeveloperName' required=true)
         public String serviceEndpoint;
@@ -218,6 +218,10 @@ public with sharing class GenericInvocableRequest {
         }
 
         return response;
+    }
+
+    public Map<String, Object> retrive(String recordId, String serviceEndpoint, Map<String, Object> calloutParams){
+        return makeCallout(serviceEndpoint, calloutParams);
     }
 
     private static String extractStringFromResponse(String keyPath, Map<String, Object> responseMap) {

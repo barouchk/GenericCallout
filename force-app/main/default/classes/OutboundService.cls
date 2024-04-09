@@ -1,11 +1,3 @@
-/**
- * Created by ilana.brodsky on 04/08/2020.
-    * @modifiedBy     
-    * @version        
-    * @created        04/08/2020
-    * @modified      
- */
-
 global with sharing class OutboundService {
     private static final String ORG_NAME_SERVICE_DELIMITER = '_';
 
@@ -56,6 +48,22 @@ global with sharing class OutboundService {
 
         return headersMap;
     }
+
+    private String generateGetEndpointWithParams(String endpoint, String requestJson){
+        Map<String, Object> requestObjectsMap = (Map<String, Object>) JSON.deserializeUntyped(requestJson);
+        Map<String, Object> requestMap = (Map<String, Object>) requestObjectsMap.get('Request');
+        Map<String, Object> inParamsMap = (Map<String, Object>) requestMap.get('InParams');
+
+        for(String key : inParamsMap.keySet()){
+            String replaceParamKey = '{'+ key +'}';
+            if(endpoint.contains(key)){
+                endpoint = endpoint.replace(replaceParamKey, (String)inParamsMap.get(key));
+                inParamsMap.remove(key);
+            }
+        }
+        return endpoint;
+    }
+
     private void findRequestHeaderParams(String requestJson) {
         Map<String, Object> requestObjectsMap = (Map<String, Object>) JSON.deserializeUntyped(requestJson);
         Map<String, Object> requestHeaderMap = (Map<String, Object>) requestObjectsMap.get('RequestHeader');
@@ -90,7 +98,9 @@ global with sharing class OutboundService {
         HttpRequest req = new HttpRequest();
         req.setMethod(serviceEndpoint.Method_Type__c);
         if (serviceEndpoint.Method_Type__c == 'GET') {
-            req.setEndpoint(getEndpoint(serviceEndpoint) + body); //ENDPOINT FOR GET - No body
+            String endpoint = getEndpoint(serviceEndpoint);
+            endpoint = generateGetEndpointWithParams(endPoint, body);
+            req.setEndpoint(endpoint); //ENDPOINT FOR GET - No body
         } else {
             req.setEndpoint(getEndpoint(serviceEndpoint)); //ENDPOINT FOR POST
             req.setBody(body);
@@ -140,20 +150,12 @@ global with sharing class OutboundService {
 
     /**
      * Callout to service by name, method and body -*** The global main method that will be called ***
-     * Author	: Ilana Brodsky
-     *
-     * @method	: send
-     * @since	: 05/08/2020
      *
      * @param {String}			: Service name field from the relevant endpoint in the Meta Data- example : ApiGateway
      * @param {String}			: Service method name field - the relevant name of the endpoint that will be do the callout
      * @param {String}			: Payload - serialized mapping
      * @return {HTTPResponse}	: Response
      */
-
-    global HTTPResponse send(String serviceName, String methodName, String body) {
-        return send(serviceName, methodName, body);
-    }
 
     global HTTPResponse send(String methodName, String body) {
         Service_Endpoint__mdt serviceEndpoint = Service_Endpoint__mdt.getInstance(methodName);

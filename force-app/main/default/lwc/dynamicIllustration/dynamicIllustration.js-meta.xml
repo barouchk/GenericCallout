@@ -7,8 +7,8 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
-            <property name="dynamicLabel" type="String" label="Dynamic Label" role="inputOnly" />
-            <property name="dynamicImg" type="String" label="Dynamic Img" role="inputOnly" />
+            <property name="label" type="String" label="Label" role="inputOnly" />
+            <property name="illustrationName" type="String" label="Illustration Name" role="inputOnly"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

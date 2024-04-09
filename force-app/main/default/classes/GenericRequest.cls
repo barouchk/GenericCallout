@@ -14,7 +14,6 @@ public with sharing class GenericRequest {
     public class RequestHeader {
         public String AppID, ServiceName, EnvCode, TransactionID;
         public Integer Timeout;
-        public ClientHeader ClientHeader;
 
         public RequestHeader(String serviceName, String transactionId) {
             Service_Endpoint__mdt serviceEndpointInstance = Service_Endpoint__mdt.getInstance(serviceName);
@@ -25,21 +24,6 @@ public with sharing class GenericRequest {
             EnvCode = salesforce + '_' + envSettings.Env__c;
             Timeout = Integer.valueOf(envSettings.Timeout__c);
             this.TransactionID = transactionId;
-            if ( serviceEndpointInstance.Include_Client_Header__c ) {
-                ClientHeader = new ClientHeader();
-            }
-        }
-    }
-
-    public class ClientHeader {
-        public String Operator_ID, Application_ID;
-
-        public ClientHeader() {
-            this(String.valueOf(user.Id),  '<Project_Name>');
-        }
-        public ClientHeader(String operatorId, String applicationId) {
-            this.Operator_ID = operatorId;
-            this.Application_ID = applicationId;
         }
     }
 
@@ -49,11 +33,9 @@ public with sharing class GenericRequest {
     }
 
     public class RequestObject {
-        RequestHeader RequestHeader;
         Object InParams;
 
         public RequestObject(String serviceName, Object inParams, String transactionId) {
-            RequestHeader = new RequestHeader(serviceName, transactionId);
             this.InParams = inParams;
         }
     }
@@ -64,7 +46,7 @@ public with sharing class GenericRequest {
 
         Request(String serviceName, Object inParams) {
             String transactionId = outUtils.generateUUID();
-            RequestHeader = new GeneralRequestHeader(transactionId, '<to_system>', null);
+            RequestHeader = new GeneralRequestHeader(transactionId, 'Outbound', null);
             Request = new RequestObject(serviceName, inParams, transactionId);
         }
     }
@@ -89,7 +71,7 @@ public with sharing class GenericRequest {
             Error = new ResponseHeaderError(errorCode, errorDesc);
         }
 
-        @AuraEnabled public String ServiceName, TransactionID, ESB_Status, Application_Status;
+        @AuraEnabled public String ServiceName, TransactionID, Application_Status;
         @AuraEnabled public ResponseHeaderError Error;
     }
 
@@ -109,7 +91,7 @@ public with sharing class GenericRequest {
 
     private static Object makeCalloutHelper(String serviceName, Object request, Type responseClass) {
         System.debug('request: ' + JSON.serializePretty(request));
-        HttpResponse response = service.send('ApiGateway', serviceName, JSON.serialize(request));
+        HttpResponse response = service.send(serviceName, JSON.serialize(request));
         String body = response.getBody();
         Integer statusCode = response.getStatusCode();
         System.debug('response: ' + JSON.serializePretty(body));
@@ -125,17 +107,8 @@ public with sharing class GenericRequest {
         return responseClass == null ? res : JSON.deserialize(JSON.serialize(res), responseClass);
     }
 
-    private static Object makeCalloutHelper(String serviceName, Request request, Type responseClass) {
-        return makeCalloutHelper(serviceName, request, responseClass);
-    }
-
     public static Object makeCallout(String serviceName, Object inParams, Type responseClass) {
         Request request = new Request(serviceName, inParams);
         return makeCalloutHelper(serviceName, request, responseClass);
     }
-
-    public static Object makeGenericCallout(String serviceName, Object request, Type responseClass) {
-        return makeCalloutHelper(serviceName, request, responseClass);
-    }
-
 }

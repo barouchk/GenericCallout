@@ -3,11 +3,12 @@ import { api, LightningElement } from 'lwc';
 export default class DynamicIllustration extends LightningElement {
 
     // Api variables
-    @api dynamicLabel = '';
-    @api dynamicImg = '';
+    @api label = '';
+    @api illustrationName = '';
+    @api size;
 
     // Global variables (Object)
-    srcImgList = {
+    srcIllustrationList = {
         OpenRoad: '/img/chatter/OpenRoad.svg',
         Desert: '/img/chatter/Desert.svg',
         NoEvents: '/projRes/ui-home-private/emptyStates/noEvents.svg',
@@ -17,8 +18,10 @@ export default class DynamicIllustration extends LightningElement {
 
     // Global variables (String)
     dynamicSrc = '';
+    illustrationClass = 'slds-illustration'
 
-    renderedCallback() {
-        this.dynamicSrc = this.srcImgList[this.dynamicImg];
+    connectedCallback() {
+        this.dynamicSrc = this.srcIllustrationList[this.illustrationName];
+        this.illustrationClass += ` ${`slds-illustration_${this.size || 'large'}`}`
     }
 }

@@ -318,11 +318,17 @@ export default class GenericInvocableRequestConfigurationEditor extends Lightnin
     }
 
     @api validate() {
+        const validity = [];
         const { validityMsg } = this.validateParamsJson();
-        return {
-            isValid: this.isEmpty(validityMsg),
-            errorMessage: validityMsg
+
+        if(!this.isEmpty(validityMsg)){
+            validity.push({
+                key: 'paramsJson',
+                errorString: validityMsg
+            });
         }
+
+        return validity;
     }
 
     isEmpty(data) {

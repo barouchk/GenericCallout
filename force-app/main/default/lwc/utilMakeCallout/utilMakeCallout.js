@@ -52,7 +52,8 @@ export default class UtilMakeCallout extends LightningElement {
                 calloutResult[fieldApiName] = getFieldValue(data, fieldApiName);
             });
         } else if (error) {
-            errorMessage = 'wired error:', JSON.stringify(error, null, 4);
+            errorMessage = 'wired error: ' + error.body.message;
+            console.log(JSON.stringify(error, null, 4));
         }
 
         this.fireCalloutEvent(calloutResult, errorMessage);

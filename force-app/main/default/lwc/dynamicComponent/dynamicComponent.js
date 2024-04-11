@@ -22,7 +22,7 @@ export default class DynamicComponent extends LightningElement {
     wiredFields;
 
     maxRowSelection;
-    displayCheckboxColumn;
+    hideCheckboxColumn;
     calloutParamsPath;
 
     // loading indications
@@ -70,18 +70,20 @@ export default class DynamicComponent extends LightningElement {
         }
     }
 
-    // Global variables (Boolean)
-    displayDynamicIllustration;
-    hideCheckboxColumn;
 
-    // Global variables (String)
+    // Illustration variables (String)
     noDataMessage;
     illustration;
     illustrationSize;
+    displayDynamicIllustration;
 
     // Global variables (List)
     @track columns;
     @track actions;
+
+    defaultSortDirection = 'asc';
+    sortDirection = 'asc';
+    sortedBy;
 
     // Global variables (Object)
     @track data;
@@ -133,16 +135,17 @@ export default class DynamicComponent extends LightningElement {
     }
 
     assignWrapperFields(wrapper) {
-        const { title, icon, type, serviceEndpoint, dataPath, columns,
+        const { title, icon, type, serviceEndpoint, dataPath, columns, maxRowSelection,
             illustration, illustrationSize, noDataMessage,
             apexClass, isNestedCard, hideHeader, headerStyle } = wrapper
 
-        console.log('wrapper >> ', JSON.stringify(wrapper, null, 4));
         this.type = type
 
         // card 
         this.title = title
         this.icon = icon
+        this.maxRowSelection = maxRowSelection
+        this.hideCheckboxColumn = (maxRowSelection < 1)
         this.hideHeader = hideHeader
         this.isNestedCard = isNestedCard
         this.headerStyle = headerStyle
@@ -157,13 +160,13 @@ export default class DynamicComponent extends LightningElement {
         this.apexClass = apexClass
         this.calloutParamsPath = dataPath
 
-        this.columns = columns
+        this.columns = columns.map(column => ({ ...column, sortable: true, cellAttributes: { alignment: 'left' } }))
     }
 
     populateDetailPageData(data) {
         const sections = Object.values(data.reduce((sectionsMap, field) => ({
             ...sectionsMap,
-            [field.section || '']: {
+            [field.section?.title || '']: {
                 id: field.section?.id || 0,
                 title: field.section?.title,
                 order: field.section?.order || 0,
@@ -172,14 +175,11 @@ export default class DynamicComponent extends LightningElement {
             }
         }), {})).sort((a, b) => a.order - b.order);
 
-        const activeSections = sections.filter(({ isDefaultOpen }) => isDefaultOpen).map(({ title }) => title); // list of section names
-        console.log('section >> ', sections);
-
+        const activeSections = sections.filter(({ isDefaultOpen }) => isDefaultOpen).map(({ title }) => title);
         const index = sections.findIndex((element) => element.id === 0);
         let mainData = []
         if (index > -1) {
             mainData = sections.splice(index, 1)[0].fields;
-            console.log('main >> ', mainData);
         }
 
         this.data = { sections, mainData, activeSections }
@@ -217,14 +217,14 @@ export default class DynamicComponent extends LightningElement {
             return;
         }
 
-        var wiredFields = this.columns.reduce((wiredFields, field) => {
+        var wiredFieldsResult = this.columns.reduce((wiredFields, field) => {
             if (field.source === 'SF') {
                 wiredFields.push(field.fieldName);
             }
             return wiredFields;
         }, []);
 
-        this.wiredFields = wiredFields;
+        this.wiredFields = wiredFieldsResult;
     }
 
     handleCalloutResult(e) {
@@ -243,7 +243,12 @@ export default class DynamicComponent extends LightningElement {
             this.resultData = resultData;
 
             if (resultData && !this.isTable) {
-                const data = this.columns?.map(column => ({ ...column, value: resultData[column.fieldName] }));
+                const data = this.columns?.map(column => ({
+                    ...column,
+                    value: resultData[column.fieldName]
+                }))
+                    .filter(column => (!column.isHiddenWhenEmpty || (column.value && column.isHiddenWhenEmpty)))
+
                 if (this.isDetailPage) {
                     this.populateDetailPageData(data);
                 } else {
@@ -346,5 +351,31 @@ export default class DynamicComponent extends LightningElement {
 
     onSectionClicked(event) {
         console.log(event.target)
+    }
+
+    onHandleSort(event) {
+        const { fieldName: sortedBy, sortDirection } = event.detail;
+        const cloneData = [...this.data];
+
+        cloneData.sort(this.sortBy(sortedBy, sortDirection === 'asc' ? 1 : -1));
+        this.data = cloneData;
+        this.sortDirection = sortDirection;
+        this.sortedBy = sortedBy;
+    }
+
+    sortBy(field, reverse, primer) {
+        const key = primer
+            ? function (x) {
+                return primer(x[field]);
+            }
+            : function (x) {
+                return x[field];
+            };
+
+        return function (a, b) {
+            a = key(a);
+            b = key(b);
+            return reverse * ((a > b) - (b > a));
+        };
     }
 }

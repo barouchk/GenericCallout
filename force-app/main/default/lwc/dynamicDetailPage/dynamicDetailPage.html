@@ -1,0 +1,34 @@
+<template>
+    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+        <template for:each={detailsData.mainData} for:item="field">
+            <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
+
+                <div class="slds-form-element slds-form-element_readonly">
+                    <lightning-input type={field.type} label={field.label} value={field.value}
+                        formatter={field.formatter} readonly> </lightning-input>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <lightning-accordion active-section-name={detailsData.activeSections} allow-multiple-sections-open
+        class="slds-m-bottom_medium">
+        <template if:true={detailsData.sections} for:each={detailsData.sections} for:item="section">
+            <lightning-accordion-section key={section.id} name={section.title} label={section.title}
+                class="accordion-section-hooks slds-m-bottom_small">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <template for:each={section.fields} for:item="field">
+                        <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
+                            <div class="slds-form-element slds-form-element_readonly">
+                                <lightning-input type={field.type} label={field.label} value={field.value}
+                                    formatter={field.formatter} readonly>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </lightning-accordion-section>
+        </template>
+    </lightning-accordion>
+
+</template>

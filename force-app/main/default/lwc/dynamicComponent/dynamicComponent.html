@@ -45,61 +45,16 @@
 
                 <div class="slds-scrollable_x">
                   <c-custom-data-table key-field="id" data={data} columns={columns}
-                    hide-checkbox-column={hideCheckboxColumn} resize-column-disabled max-row-selection={maxRowSelection}
-                    max-column-width="2000" onrowselection={handleRowSelection} onrowaction={handleRowAction}>
+                    hide-checkbox-column={hideCheckboxColumn} max-row-selection={maxRowSelection}
+                    max-column-width="2000" onrowselection={handleRowSelection} onrowaction={handleRowAction}
+                    default-sort-direction={defaultSortDirection} sorted-direction={sortDirection} sorted-by={sortedBy}
+                    onsort={onHandleSort} resize-column-disabled>
                   </c-custom-data-table>
                 </div>
 
               </template>
               <template if:true={isDetailPage}>
-
-                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                  <template for:each={data.mainData} for:item="field">
-                    <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
-                      <div class="slds-form-element slds-form-element_readonly">
-                        <span class="slds-form-element__label">{field.label}</span>
-                        <div class="slds-form-element__control">
-                          <div class="slds-form-element__static slds-truncate">{field.value}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-
-                <lightning-accordion active-section-name={data.activeSections} allow-multiple-sections-open
-                  class="slds-m-bottom_medium">
-                  <template if:true={data.sections} for:each={data.sections} for:item="section">
-                    <lightning-accordion-section key={section.id} name={section.title} label={section.title}
-                      class="accordion-section-hooks slds-m-bottom_small">
-                      <div class="slds-grid slds-wrap slds-gutters">
-                        <template for:each={section.fields} for:item="field">
-                          <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
-                            <div class="slds-form-element slds-form-element_readonly">
-                              <span class="slds-form-element__label">{field.label}</span>
-                              <div class="slds-form-element__control">
-                                <div class="slds-form-element__static slds-truncate">{field.value}</div>
-                              </div>
-                            </div>
-                          </div>
-                        </template>
-                      </div>
-                    </lightning-accordion-section>
-                  </template>
-                </lightning-accordion>
-
-                <!-- <div class="slds-grid slds-wrap slds-gutters">
-                  <template for:each={data} for:item="field">
-                    <div key={field.fieldName} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
-                      <div class="slds-form-element slds-form-element_readonly">
-                        <span class="slds-form-element__label">{field.label}</span>
-                        <div class="slds-form-element__control">
-                          <div class="slds-form-element__static slds-truncate">{field.value}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-                </div> -->
-
+                <c-dynamic-detail-page details-data={data}></c-dynamic-detail-page>
               </template>
               <template if:true={isCompactLayout}>
 

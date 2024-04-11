@@ -24,14 +24,14 @@ public with sharing class CustomComponent {
         DC_Wrapper__mdt wrapper = [
             SELECT Id, Label, Icon__c, Display_Type__c, Apex_Class__c,
             Is_Nested_Card__c, Hide_Card_Header__c, Card_Header_Style__c,
-            Illustration__c, Illustration_Size__c, No_Data_Message__c,
+            Illustration__c, Illustration_Size__c, No_Data_Message__c, Max_Row_Selection__c,
             Service_Endpoint__r.DeveloperName,
             Service_Endpoint__r.Data_Path__c,
             (SELECT Id, Label, Source__c, Order__c, Field_API_Name__c,Type__c,
             Tooltip_Field__c, Is_Hidden_When_Empty__c, toLabel__c,
             DC_Section__c, DC_Section__r.DeveloperName, DC_Section__r.Label, 
-            DC_Section__r.Order__c, DC_Section__r.Default_Open__c,
-            SF_Object__c FROM dc_fields__r WHERE Active__c = true ORDER BY Order__c),
+            DC_Section__r.Order__c, DC_Section__r.Default_Open__c
+            FROM dc_fields__r WHERE Active__c = true ORDER BY Order__c),
             (SELECT Id, Label, DeveloperName, Type__c, Flow_Name__c, Order__c 
             FROM DC_Actions__r WHERE Active__c = true ORDER BY Order__c)
         FROM  DC_Wrapper__mdt
@@ -51,6 +51,7 @@ public with sharing class CustomComponent {
             wrapperInfo.type = wrapper.Display_Type__c;
             wrapperInfo.serviceEndpoint = wrapper.Service_Endpoint__r.DeveloperName;
             wrapperInfo.dataPath = wrapper.Service_Endpoint__r.Data_Path__c;
+            wrapperInfo.maxRowSelection = wrapper.Max_Row_Selection__c;
             wrapperInfo.apexClass = wrapper.Apex_Class__c;
             wrapperInfo.isNestedCard = wrapper.Is_Nested_Card__c;
             wrapperInfo.hideHeader = wrapper.Hide_Card_Header__c;
@@ -59,21 +60,30 @@ public with sharing class CustomComponent {
             wrapperInfo.illustrationSize = wrapper.Illustration_Size__c;
             wrapperInfo.noDataMessage = wrapper.No_Data_Message__c;
 
-            wrapperInfo.columns = getColumns(wrapper.dc_fields__r);
+            wrapperInfo.columns = getColumns(wrapper.Display_Type__c, wrapper.dc_fields__r);
             wrapperInfo.actions = getActions(wrapper.DC_Actions__r);
         }
 
         return wrapperInfo;
     }
 
-    public static List<FieldInfo> getColumns(List<DC_Field__mdt> fieldList) {
+    public static List<FieldInfo> getColumns(String wrapperType, List<DC_Field__mdt> fieldList) {
         List<FieldInfo> fieldInfoResult = new List<FieldInfo>();
         for (DC_Field__mdt oneField : fieldList) {
+
+            String fieldType = oneField.Type__c;
+            String formatter = '';
+
+            if(wrapperType != 'Table' && (fieldType == 'currency' || fieldType == 'percent')){
+                    formatter = fieldType;
+                    fieldType = 'number';
+            }
 
             FieldInfo fieldInfo = new fieldInfo(
                 oneField.Field_API_Name__c, 
                 oneField.Label,
-                oneField.Type__c, 
+                fieldType, 
+                formatter,
                 oneField.Source__c, 
                 oneField.Is_Hidden_When_Empty__c);
 
@@ -122,6 +132,9 @@ public with sharing class CustomComponent {
         
         @AuraEnabled
         public String dataPath {get;set;}
+
+        @AuraEnabled
+        public Decimal maxRowSelection {get;set;}
 
         @AuraEnabled
         public String apexClass {get;set;}
@@ -187,6 +200,9 @@ public with sharing class CustomComponent {
         public String type {get;set;} 
 
         @AuraEnabled
+        public String formatter {get;set;} 
+
+        @AuraEnabled
         public String source {get;set;} 
 
         @AuraEnabled
@@ -199,10 +215,11 @@ public with sharing class CustomComponent {
 
         }
 
-        public FieldInfo(String fieldName, String label, String type, String source, Boolean isHiddenWhenEmpty){
+        public FieldInfo(String fieldName, String label, String type,String formatter, String source, Boolean isHiddenWhenEmpty){
             this.fieldName = fieldName;
             this.label = label;
             this.type = type;
+            this.formatter = formatter;
             this.source = source;
             this.isHiddenWhenEmpty = isHiddenWhenEmpty;
         }

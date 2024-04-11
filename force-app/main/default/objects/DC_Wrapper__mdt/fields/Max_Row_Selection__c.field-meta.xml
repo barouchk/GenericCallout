@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Max_Row_Selection__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>The value should be a positive integer
+Checkboxes are used for selection by default,
+and radio buttons are used when maxRowSelection is 1
+If zero or negetive is selected the row selection is hidden</inlineHelpText>
+    <label>Max Row Selection</label>
+    <precision>3</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

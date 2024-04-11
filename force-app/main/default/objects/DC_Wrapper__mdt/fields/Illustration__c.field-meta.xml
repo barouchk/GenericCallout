@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Type__c</fullName>
+    <fullName>Illustration__c</fullName>
     <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
-    <label>Type</label>
-    <required>true</required>
+    <label>Illustration</label>
+    <required>false</required>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>true</sorted>
             <value>
-                <fullName>currency</fullName>
-                <default>false</default>
-                <label>currency</label>
+                <fullName>Desert</fullName>
+                <default>true</default>
+                <label>Desert</label>
             </value>
             <value>
-                <fullName>number</fullName>
+                <fullName>NoAssistant</fullName>
                 <default>false</default>
-                <label>number</label>
+                <label>No Assistant</label>
             </value>
             <value>
-                <fullName>percent</fullName>
+                <fullName>NoEvents</fullName>
                 <default>false</default>
-                <label>percent</label>
+                <label>No Events</label>
             </value>
             <value>
-                <fullName>text</fullName>
+                <fullName>NoTasks</fullName>
                 <default>false</default>
-                <label>text</label>
+                <label>No Tasks</label>
+            </value>
+            <value>
+                <fullName>OpenRoad</fullName>
+                <default>false</default>
+                <label>Open Road</label>
             </value>
         </valueSetDefinition>
     </valueSet>

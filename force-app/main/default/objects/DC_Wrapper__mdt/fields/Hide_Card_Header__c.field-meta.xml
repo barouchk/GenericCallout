@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hide_Card_Header__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>check when you want to remove card header</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Hide Card Header</label>
+    <type>Checkbox</type>
+</CustomField>

@@ -28,7 +28,7 @@ public with sharing class CustomComponent {
             Service_Endpoint__r.DeveloperName,
             Service_Endpoint__r.Data_Path__c,
             (SELECT Id, Label, Source__c, Order__c, Field_API_Name__c,Type__c,
-            Tooltip_Field__c, Is_Hidden_When_Empty__c, toLabel__c,
+            Is_Hidden_When_Empty__c, toLabel__c,
             DC_Section__c, DC_Section__r.DeveloperName, DC_Section__r.Label, 
             DC_Section__r.Order__c, DC_Section__r.Default_Open__c
             FROM dc_fields__r WHERE Active__c = true ORDER BY Order__c),

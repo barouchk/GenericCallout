@@ -1,4 +1,3 @@
-
 const DEFUALT_HEADER_CLASS = 'slds-card__header slds-grid'
 const HEADER_STYLES = {
     'Page Header': 'slds-page-header',

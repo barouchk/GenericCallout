@@ -10,7 +10,7 @@ public with sharing class CustomComponent {
     public static Object getClassResult(String apexClass, String recordId, String serviceEndpoint, Map<String,Object> calloutParams) {
 
         DCService service = (DCService) Type.forName(apexClass).newInstance();
-        Map<String, Object> result = service.retrive(recordId, serviceEndpoint, calloutParams);
+        Map<String, Object> result = service.retrieve(recordId, serviceEndpoint, calloutParams);
 
         if (result != null && !result.IsEmpty()) {
             return result;

@@ -220,7 +220,7 @@ public with sharing class GenericInvocableRequest implements DCService  {
         return response;
     }
 
-    public Map<String, Object> retrive(String recordId, String serviceEndpoint, Map<String, Object> calloutParams){
+    public Map<String, Object> retrieve(String recordId, String serviceEndpoint, Map<String, Object> calloutParams){
         return makeCallout(serviceEndpoint, calloutParams);
     }
 

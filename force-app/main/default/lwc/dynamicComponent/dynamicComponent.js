@@ -6,7 +6,7 @@ import wireGetWrapperModel from '@salesforce/apex/CustomComponent.wireGetWrapper
 import {
     DEFUALT_HEADER_CLASS, DEFAULT_CARD_CLASS, HEADER_STYLES, NESTED_STYLE
 } from './constants'
-import { isEmpty } from 'c/dataUtils';
+import { isEmpty, promise } from 'c/dataUtils';
 
 export default class DynamicComponent extends LightningElement {
 
@@ -121,7 +121,8 @@ export default class DynamicComponent extends LightningElement {
     async handleColumns() {
         const { developerName } = this;
         try {
-            const wrapper = await wireGetWrapperModel({ developerName });
+            // const wrapper = await wireGetWrapperModel({ developerName });
+            const wrapper = await promise(wireGetWrapperModel, { developerName });
 
             if (wrapper) {
                 this.assignWrapperFields(wrapper)

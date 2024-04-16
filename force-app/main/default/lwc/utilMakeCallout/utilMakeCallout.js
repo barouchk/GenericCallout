@@ -1,7 +1,7 @@
 import { LightningElement, api, wire } from "lwc";
 import { getRecord, getFieldValue } from "lightning/uiRecordApi";
 
-import { isEmpty } from 'c/dataUtils';
+import { isEmpty, promise } from 'c/dataUtils';
 
 import getClassResult from '@salesforce/apex/CustomComponent.getClassResult';
 
@@ -30,12 +30,19 @@ export default class UtilMakeCallout extends LightningElement {
         let errorMessage = '';
         let calloutResult
         try {
-            calloutResult = await getClassResult({
+            calloutResult = await promise(getClassResult, {
                 apexClass: apexClass ? apexClass : APEX_CLASS_METHOD,
                 recordId,
                 serviceEndpoint,
                 calloutParams
             });
+
+            // calloutResult = await getClassResult({
+            //     apexClass: apexClass ? apexClass : APEX_CLASS_METHOD,
+            //     recordId,
+            //     serviceEndpoint,
+            //     calloutParams
+            // });
         }
         catch (e) {
             errorMessage = e.body.message;

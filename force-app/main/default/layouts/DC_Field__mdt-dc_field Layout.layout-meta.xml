@@ -78,12 +78,7 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>Tooltip</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Tooltip_Field__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <layoutColumns/>
         <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>

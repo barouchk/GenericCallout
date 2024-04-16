@@ -25,8 +25,7 @@ public with sharing class CustomComponent {
             SELECT Id, Label, Icon__c, Display_Type__c, Apex_Class__c,
             Is_Nested_Card__c, Hide_Card_Header__c, Card_Header_Style__c,
             Illustration__c, Illustration_Size__c, No_Data_Message__c, Max_Row_Selection__c,
-            Service_Endpoint__r.DeveloperName,
-            Service_Endpoint__r.Data_Path__c,
+            Service_Endpoint__r.DeveloperName, Data_Path__c,
             (SELECT Id, Label, Source__c, Order__c, Field_API_Name__c,Type__c,
             Is_Hidden_When_Empty__c, toLabel__c,
             DC_Section__c, DC_Section__r.DeveloperName, DC_Section__r.Label, 
@@ -50,7 +49,7 @@ public with sharing class CustomComponent {
             wrapperInfo.icon = wrapper.Icon__c;
             wrapperInfo.type = wrapper.Display_Type__c;
             wrapperInfo.serviceEndpoint = wrapper.Service_Endpoint__r.DeveloperName;
-            wrapperInfo.dataPath = wrapper.Service_Endpoint__r.Data_Path__c;
+            wrapperInfo.dataPath = wrapper.Data_Path__c;
             wrapperInfo.maxRowSelection = wrapper.Max_Row_Selection__c;
             wrapperInfo.apexClass = wrapper.Apex_Class__c;
             wrapperInfo.isNestedCard = wrapper.Is_Nested_Card__c;

@@ -49,3 +49,20 @@ export const getValueByStringPath = (from, ...selectors) =>
       .filter(t => t !== '')
       .reduce((prev, cur) => prev && prev[cur], from)
   );
+
+export const promise = function (functionName, params) {
+
+    return new Promise((resolve, reject) => {
+        // const time = Math.floor(Math.random() * (1000)) + 1000
+        // const time = [250, 500, 750, 1000, 1250, 1500, 1750, 2000][Math.floor(Math.random()*8)]
+        const time = [200, 400, 600, 800, 1000, 1200, 1400, 1600][Math.floor(Math.random()*8)]
+
+        setTimeout(() => {
+            try {
+                resolve(functionName(params));
+            } catch (e) {
+                reject(e)
+            }
+        }, time);
+    })
+};

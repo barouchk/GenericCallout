@@ -22,10 +22,6 @@
                 <behavior>Required</behavior>
                 <field>Service_Name__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Data_Path__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

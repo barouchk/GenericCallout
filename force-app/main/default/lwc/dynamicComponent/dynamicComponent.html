@@ -27,17 +27,12 @@
     </div>
     <div class="slds-card__body slds-card__body_inner">
       <template if:true={isWrapperLoaded}>
+        <template if:false={isDataLoaded}>
+          <c-custom-stencil type={type}></c-custom-stencil>
+        </template>
 
         <c-util-make-callout record-id={recordId} wired-fields={wiredFields} apex-class={apexClass}
           service-endpoint={serviceEndpoint} callout-params={calloutParams} oncalloutresult={handleCalloutResult}>
-          <!-- <c-lwc-labs-loading-stencil lwc:if={isLoading} type="list"></c-lwc-labs-loading-stencil> -->
-
-          <template if:false={isDataLoaded}>
-            <div class="slds-spinner_inline">
-
-              <lightning-spinner></lightning-spinner>
-            </div>
-          </template>
 
           <template if:true={isDataLoaded}>
             <template if:true={data}>
@@ -46,9 +41,9 @@
                 <div class="slds-scrollable_x">
                   <c-custom-data-table key-field="id" data={data} columns={columns}
                     hide-checkbox-column={hideCheckboxColumn} max-row-selection={maxRowSelection}
-                    max-column-width="2000" onrowselection={handleRowSelection} onrowaction={handleRowAction}
-                    default-sort-direction={defaultSortDirection} sorted-direction={sortDirection} sorted-by={sortedBy}
-                    onsort={onHandleSort} resize-column-disabled>
+                    show-row-number-column={showRowNumber} max-column-width="2000" onrowselection={handleRowSelection}
+                    onrowaction={handleRowAction} default-sort-direction={defaultSortDirection}
+                    sorted-direction={sortDirection} sorted-by={sortedBy} onsort={onHandleSort} resize-column-disabled>
                   </c-custom-data-table>
                 </div>
 

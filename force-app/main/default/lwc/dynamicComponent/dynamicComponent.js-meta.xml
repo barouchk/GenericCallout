@@ -6,6 +6,7 @@
         <target>lightning__FlowScreen</target>
         <target>lightning__RecordPage</target>
     </targets> 
+    <masterLabel>Dynamic Component</masterLabel>
     <targetConfigs> 
         <targetConfig targets="lightning__FlowScreen">
             <property label="RecordId" name="recordId" type="String" description="Object Record Id" role="inputOnly"/>

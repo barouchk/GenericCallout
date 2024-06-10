@@ -1,0 +1,61 @@
+<template>
+    <div class="stencil-container-outer">
+        <lightning-spinner lwc:if={showSpinner} size="medium" variant="brand"></lightning-spinner>
+        <!-- Table Loading Stencil -->
+        <div lwc:if={isTable} class="stencil table skeleton-loader-container">
+            <div class="skeleton-loader-table">
+                <div for:each={rows} for:item="row" key={row} class="skeleton-loader-row slds-border_bottom">
+                    <div class="skeleton-loader-cell"></div>
+                    <div class="skeleton-loader-cell"></div>
+                    <div class="skeleton-loader-cell"></div>
+                    <div class="skeleton-loader-cell"></div>
+                    <div class="skeleton-loader-cell"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Path Loading Stencil -->
+        <ul lwc:if={isPath} class="stencil path slds-path__nav">
+            <li for:each={items} for:item="item" key={item} class="slds-path__item slds-is-incomplete">
+                <a class="slds-path__link"></a>
+            </li>
+        </ul>
+        <!-- Activity Loading Stencil -->
+        <div lwc:if={isActivity} class="stencil activity">
+            <div for:each={items} for:item="item" key={item} class="activity_discussion">
+                <div class="body flex-grid" style="display:flex">
+                    <div class="icon icon-small"></div>
+                    <div class="text-body">
+                        <div class="text text-long text-thick"></div>
+                        <div class="text-body-no-col">
+                            <div class="text text-medium"></div>
+                            <div class="text text-tiny"></div>
+                        </div>
+                        <div class="text-body-no-col">
+                            <div class="text text-short"></div>
+                            <div class="text text-short"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Compact Loading Stencil -->
+        <div lwc:if={isCompact} class="slds-grid slds-gutters stencil compact">
+            <div class="slds-col" for:each={items} for:item="item" key={item}>
+                <div class="text text-short"></div>
+                <div class="text text-medium"></div>
+            </div>
+        </div>
+        <!-- Detail Page Loading Stencil -->
+        <div lwc:if={isDetail} class="slds-grid slds-wrap slds-gutters stencil detail">
+            <template for:each={fields} for:item="field">
+                <div key={field} class="slds-col slds-size_1-of-2 slds-m-bottom_x-small">
+                    <div class="slds-form-element">
+                        <div class="text text-short"></div>
+                        <div class="text text-long"></div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</template>

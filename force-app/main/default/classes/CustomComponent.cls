@@ -21,10 +21,11 @@ public with sharing class CustomComponent {
 
     public static DC_Wrapper__mdt getWrapperModel(String developerName) {
 
-        DC_Wrapper__mdt wrapper = [
+        List<DC_Wrapper__mdt> wrappers = [
             SELECT Id, Label, Icon__c, Display_Type__c, Apex_Class__c,
             Is_Nested_Card__c, Hide_Card_Header__c, Card_Header_Style__c,
-            Illustration__c, Illustration_Size__c, No_Data_Message__c, Max_Row_Selection__c,
+            Illustration__c, Illustration_Size__c, No_Data_Message__c, 
+            Max_Row_Selection__c, Show_Row_Number__c,
             Service_Endpoint__r.DeveloperName, Data_Path__c,
             (SELECT Id, Label, Source__c, Order__c, Field_API_Name__c,Type__c,
             Is_Hidden_When_Empty__c, toLabel__c,
@@ -36,7 +37,11 @@ public with sharing class CustomComponent {
         FROM  DC_Wrapper__mdt
         WHERE DeveloperName =: developerName LIMIT 1];
 
-        return wrapper;
+        if(!wrappers.isEmpty()){
+            return wrappers[0];
+        }
+        
+        return null;
     }
 
     public static WrapperInfo fillWrapperInfo(DC_Wrapper__mdt wrapper) {
@@ -51,6 +56,7 @@ public with sharing class CustomComponent {
             wrapperInfo.serviceEndpoint = wrapper.Service_Endpoint__r.DeveloperName;
             wrapperInfo.dataPath = wrapper.Data_Path__c;
             wrapperInfo.maxRowSelection = wrapper.Max_Row_Selection__c;
+            wrapperInfo.showRowNumber = wrapper.Show_Row_Number__c;
             wrapperInfo.apexClass = wrapper.Apex_Class__c;
             wrapperInfo.isNestedCard = wrapper.Is_Nested_Card__c;
             wrapperInfo.hideHeader = wrapper.Hide_Card_Header__c;
@@ -134,6 +140,9 @@ public with sharing class CustomComponent {
 
         @AuraEnabled
         public Decimal maxRowSelection {get;set;}
+
+        @AuraEnabled
+        public Boolean showRowNumber {get;set;}
 
         @AuraEnabled
         public String apexClass {get;set;}

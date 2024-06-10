@@ -11,6 +11,7 @@ import { isEmpty, promise } from 'c/dataUtils';
 export default class DynamicComponent extends LightningElement {
 
     @api recordId;
+    @api flexipageRegionWidth;
     @api developerName;
     @api selectedRows = [];
 
@@ -21,8 +22,11 @@ export default class DynamicComponent extends LightningElement {
     apexClass;
     wiredFields;
 
+    // table properties
     maxRowSelection;
+    showRowNumber;
     hideCheckboxColumn;
+
     calloutParamsPath;
 
     // loading indications
@@ -59,17 +63,6 @@ export default class DynamicComponent extends LightningElement {
     get isCompactLayout() {
         return this.type === 'Compact Layout'
     }
-
-    get stensilType() {
-        if (this.isTable) {
-            return 'table'
-        } else if (this.isDetailPage) {
-            return 'activity'
-        } else if (this.isCompactLayout) {
-            return ''
-        }
-    }
-
 
     // Illustration variables (String)
     noDataMessage;
@@ -116,6 +109,7 @@ export default class DynamicComponent extends LightningElement {
 
     connectedCallback() {
         this.handleColumns();
+        console.log('region >> ', this.flexipageRegionWidth);
     }
 
     async handleColumns() {
@@ -136,7 +130,8 @@ export default class DynamicComponent extends LightningElement {
     }
 
     assignWrapperFields(wrapper) {
-        const { title, icon, type, serviceEndpoint, dataPath, columns, maxRowSelection,
+        const { title, icon, type, serviceEndpoint, dataPath, columns,
+            maxRowSelection, showRowNumber,
             illustration, illustrationSize, noDataMessage,
             apexClass, isNestedCard, hideHeader, headerStyle } = wrapper
 
@@ -146,6 +141,7 @@ export default class DynamicComponent extends LightningElement {
         this.title = title
         this.icon = icon
         this.maxRowSelection = maxRowSelection
+        this.showRowNumber = showRowNumber
         this.hideCheckboxColumn = (maxRowSelection < 1)
         this.hideHeader = hideHeader
         this.isNestedCard = isNestedCard

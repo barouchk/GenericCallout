@@ -18,7 +18,7 @@
             <value>
                 <fullName>application/json</fullName>
                 <default>false</default>
-                <isActive>false</isActive>
+                <isActive>true</isActive>
                 <label>application/json</label>
             </value>
         </valueSetDefinition>

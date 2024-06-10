@@ -5,18 +5,21 @@
     <targets>
         <target>lightning__FlowScreen</target>
         <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__HomePage</target>
     </targets> 
     <masterLabel>Dynamic Component</masterLabel>
     <targetConfigs> 
         <targetConfig targets="lightning__FlowScreen">
             <property label="RecordId" name="recordId" type="String" description="Object Record Id" role="inputOnly"/>
-            <property label="Developer Name" name="developerName" type="String" description="Dynamic Wrapper Developer Name" role="inputOnly"/>
-            <property label="Callout paramters" name="calloutParams" type="String" role="inputOnly"/>
-            <property label="Selected rows" name="selectedRows" type="String[]" role="outputOnly"/>
+            <property label="Wrapper Developer Name" name="developerName" type="String" description="Dynamic Wrapper Developer Name" role="inputOnly"/>
+            <property label="Callout Paramters" name="calloutParams" type="String" role="inputOnly"/>
+            <property label="Selected Rows" name="selectedRows" type="String[]" role="outputOnly"/>
             <property label="Filters" name="filters" type="String" role="inputOnly" description='enter filter as json example: {"key":"value", "key2":"value2"}'/>
         </targetConfig>         
-        <targetConfig targets="lightning__RecordPage">
-            <property label="Developer Name" name="developerName" type="String" description="Screen field record type. "/>
+        <targetConfig targets="lightning__RecordPage,lightningCommunity__Default,lightning__HomePage">
+            <property label="Wrapper Developer Name" name="developerName" type="String" description="Screen field record type. "/>
         </targetConfig>         
     </targetConfigs> 
 </LightningComponentBundle>

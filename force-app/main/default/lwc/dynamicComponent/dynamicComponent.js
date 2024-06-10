@@ -109,7 +109,6 @@ export default class DynamicComponent extends LightningElement {
 
     connectedCallback() {
         this.handleColumns();
-        console.log('region >> ', this.flexipageRegionWidth);
     }
 
     async handleColumns() {

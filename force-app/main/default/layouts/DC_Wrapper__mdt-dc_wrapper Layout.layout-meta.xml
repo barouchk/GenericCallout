@@ -79,6 +79,10 @@
                 <behavior>Edit</behavior>
                 <field>Max_Row_Selection__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Show_Row_Number__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>

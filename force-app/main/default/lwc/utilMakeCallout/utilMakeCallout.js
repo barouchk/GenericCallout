@@ -26,7 +26,7 @@ export default class UtilMakeCallout extends LightningElement {
     recordObj;
 
     async getResult() {
-        const { recordId, serviceEndpoint, calloutParams = {}, apexClass } = this;
+        const { recordId = '', serviceEndpoint, calloutParams = {}, apexClass } = this;
         let errorMessage = '';
         let calloutResult
         try {
@@ -36,13 +36,6 @@ export default class UtilMakeCallout extends LightningElement {
                 serviceEndpoint,
                 calloutParams
             });
-
-            // calloutResult = await getClassResult({
-            //     apexClass: apexClass ? apexClass : APEX_CLASS_METHOD,
-            //     recordId,
-            //     serviceEndpoint,
-            //     calloutParams
-            // });
         }
         catch (e) {
             errorMessage = e.body.message;
@@ -50,6 +43,10 @@ export default class UtilMakeCallout extends LightningElement {
 
         if (isEmpty(calloutResult)) {
             this.fireCalloutEvent(null, errorMessage);
+            return;
+        } else if (Object.hasOwn(calloutResult, 'ResponseHeader')) {
+            const { Application_Status, Error: { ErrCode, ErrDesc } } = calloutResult.ResponseHeader
+            this.fireCalloutEvent(null, `${Application_Status}:${ErrDesc}`);
             return;
         }
 

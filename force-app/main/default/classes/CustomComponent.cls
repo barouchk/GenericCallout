@@ -30,7 +30,8 @@ public with sharing class CustomComponent {
             (SELECT Id, Label, Source__c, Order__c, Field_API_Name__c,Type__c,
             Is_Hidden_When_Empty__c, toLabel__c,
             DC_Section__c, DC_Section__r.DeveloperName, DC_Section__r.Label, 
-            DC_Section__r.Order__c, DC_Section__r.Default_Open__c
+            DC_Section__r.Order__c, DC_Section__r.Default_Open__c,
+            (SELECT Id, Icon__c, Value__c, Color__c FROM DC_Dynamic_Values__r)
             FROM dc_fields__r WHERE Active__c = true ORDER BY Order__c),
             (SELECT Id, Label, DeveloperName, Type__c, Flow_Name__c, Order__c 
             FROM DC_Actions__r WHERE Active__c = true ORDER BY Order__c)
@@ -91,6 +92,14 @@ public with sharing class CustomComponent {
                 formatter,
                 oneField.Source__c, 
                 oneField.Is_Hidden_When_Empty__c);
+
+            if(oneField.DC_Dynamic_Values__r.size() > 0){
+                fieldInfo.dynamicValuesInfo = new List<DynamicValueInfo>();
+                for(DC_Dynamic_Value__mdt dynamicValue : oneField.DC_Dynamic_Values__r){
+                    fieldInfo.dynamicValuesInfo.add(
+                        new DynamicValueInfo(dynamicValue.Value__c, dynamicValue.Icon__c, dynamicValue.Color__c));
+                }
+            }
 
             if(String.isNotBlank(oneField.DC_Section__c)){
                 fieldInfo.section = new SectionInfo(
@@ -219,11 +228,16 @@ public with sharing class CustomComponent {
         @AuraEnabled
         public SectionInfo section {get;set;} 
 
+        @AuraEnabled
+        public List<DynamicValueInfo> dynamicValuesInfo {get;set;}
+ 
+
         public FieldInfo(){
 
         }
 
-        public FieldInfo(String fieldName, String label, String type,String formatter, String source, Boolean isHiddenWhenEmpty){
+        public FieldInfo(String fieldName, String label, String type,String formatter, 
+                         String source, Boolean isHiddenWhenEmpty){
             this.fieldName = fieldName;
             this.label = label;
             this.type = type;
@@ -259,6 +273,27 @@ public with sharing class CustomComponent {
             this.flowName = flowName;
             this.type = type;
             this.order = order;
+        }
+    }
+
+    public class DynamicValueInfo{
+        @AuraEnabled
+        public String value;
+        
+        @AuraEnabled
+        public String icon;
+
+        @AuraEnabled
+        public String color; 
+
+        public DynamicValueInfo(){
+
+        }
+
+        public DynamicValueInfo(String value, String icon, String color){
+            this.value = value;
+            this.icon = icon;
+            this.color = color;
         }
     }
 }

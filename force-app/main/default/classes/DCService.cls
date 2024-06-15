@@ -1,4 +1,4 @@
-public interface DCService {
+global interface DCService {
     
     Map<String, Object> retrieve(String recordId, String serviceEndpoint, Map<String, Object> calloutParams);
 }

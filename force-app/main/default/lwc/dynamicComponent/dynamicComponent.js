@@ -116,7 +116,6 @@ export default class DynamicComponent extends LightningElement {
         try {
             // const wrapper = await wireGetWrapperModel({ developerName });
             const wrapper = await promise(wireGetWrapperModel, { developerName });
-
             if (wrapper) {
                 this.assignWrapperFields(wrapper)
                 this.assignActions(wrapper)
@@ -156,7 +155,17 @@ export default class DynamicComponent extends LightningElement {
         this.apexClass = apexClass
         this.calloutParamsPath = dataPath
 
-        this.columns = columns.map(column => ({ ...column, sortable: true, cellAttributes: { alignment: 'left' } }))
+        const dynamicTypes = ['icon','badge','boolean']
+
+        this.columns = columns.map(column => ({
+            ...column,
+            sortable: true,
+            cellAttributes: {
+                alignment: dynamicTypes.includes(column.type) ? 'center' : 'left',
+                class: dynamicTypes.includes(column.type) ? 'slds-text-align_center' : ''
+            },
+            typeAttributes: { dynamicValuesInfo: column.dynamicValuesInfo || '' }
+        }))
     }
 
     populateDetailPageData(data) {
@@ -322,7 +331,7 @@ export default class DynamicComponent extends LightningElement {
         this.inputVariables.push({
             name: 'recordId',
             type: 'String',
-            value: recordId
+            value: recordId || ''
         })
 
         this.flowApiName = flowName

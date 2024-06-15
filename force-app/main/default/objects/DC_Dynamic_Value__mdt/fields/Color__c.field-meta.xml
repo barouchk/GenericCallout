@@ -1,49 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Type__c</fullName>
+    <fullName>Color__c</fullName>
     <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
-    <label>Type</label>
-    <required>true</required>
+    <label>Color</label>
+    <required>false</required>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
         <valueSetDefinition>
-            <sorted>true</sorted>
+            <sorted>false</sorted>
             <value>
-                <fullName>badge</fullName>
-                <default>false</default>
-                <label>badge</label>
+                <fullName>gray</fullName>
+                <default>true</default>
+                <label>gray</label>
             </value>
             <value>
-                <fullName>boolean</fullName>
+                <fullName>lightgray</fullName>
                 <default>false</default>
-                <label>boolean</label>
+                <label>lightgray</label>
             </value>
             <value>
-                <fullName>currency</fullName>
+                <fullName>darkgray</fullName>
                 <default>false</default>
-                <label>currency</label>
+                <label>darkgray</label>
             </value>
             <value>
-                <fullName>icon</fullName>
+                <fullName>green</fullName>
                 <default>false</default>
-                <label>icon</label>
+                <label>green</label>
             </value>
             <value>
-                <fullName>number</fullName>
+                <fullName>orange</fullName>
                 <default>false</default>
-                <label>number</label>
+                <label>orange</label>
             </value>
             <value>
-                <fullName>percent</fullName>
+                <fullName>red</fullName>
                 <default>false</default>
-                <label>percent</label>
-            </value>
-            <value>
-                <fullName>text</fullName>
-                <default>false</default>
-                <label>text</label>
+                <label>red</label>
             </value>
         </valueSetDefinition>
     </valueSet>
